@@ -1,4 +1,4 @@
-import app from "./server";
+import app from "./app";
 const { createProxyMiddleware } = require('http-proxy-middleware');
 import domain = require('domain');
 
@@ -23,22 +23,22 @@ app.use(function (req: any, res: any, next: (...args: any[]) => any) {
 });
 
 const options = {
+  target: "http://*",
   changeOrigin: true, 
   ws: true, 
-  // pathRewrite: {
-  //   '^/api/old-path': '/api/new-path', 
-  //   '^/api/remove/path': '/path', 
-  // },
-  router: {
-    '/gameServiceC': 'http://dev.sc.com:10103/api/c',
+  pathRewrite: {
+    '^/gameServiceC': '/gameServiceC', 
   },
+  router: {
+    '/gameServiceC': 'http://cn2.efs-h5.esport777.net',
+  }
 };
 
 const filter = function (pathname: any, req:any) {
   return pathname.match('^/api') && req.method === 'GET';
 };
-const exampleProxy = createProxyMiddleware(filter, options);
-app.use('/api', exampleProxy);
+const exampleProxy = createProxyMiddleware(options);
+app.use('/', exampleProxy);
 
 app.listen(8082);
 
