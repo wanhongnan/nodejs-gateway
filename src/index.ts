@@ -22,23 +22,7 @@ app.use(function (req: any, res: any, next: (...args: any[]) => any) {
     d.run(next);
 });
 
-const options = {
-  target: "http://*",
-  changeOrigin: true, 
-  ws: true, 
-  pathRewrite: {
-    '^/gameServiceC': '/gameServiceC', 
-  },
-  router: {
-    '/gameServiceC': 'http://cn2.efs-h5.esport777.net',
-  }
-};
-
-const filter = function (pathname: any, req:any) {
-  return pathname.match('^/api') && req.method === 'GET';
-};
-const exampleProxy = createProxyMiddleware(options);
-app.use('/', exampleProxy);
-
+require("./c/cproxy")
+require("./c/cservice")
 app.listen(8082);
 
