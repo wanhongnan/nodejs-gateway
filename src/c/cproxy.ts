@@ -1,7 +1,8 @@
 
 import app from "../app";
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const { apiCache } = require('../util/api-cache');
+import apicache from 'apicache';
+var cache = apicache.middleware;
 
 const options = {
     target: "http://*",
@@ -16,6 +17,5 @@ const options = {
 };
 
 const cproxy = createProxyMiddleware(options);
-const cache = apiCache();
-app.use('/gameServiceC', cache, cproxy);
+app.use('/gameServiceC', cache('5 minutes'), cproxy);
 
